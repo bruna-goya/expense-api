@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use Illuminate\Http\Response;
 use App\Http\Requests\ExpenseRequest;
+use App\Http\Resources\ExpenseResource;
+use App\Http\Resources\ExpenseCollection;
 use Illuminate\Database\Eloquent\Collection;
 
 class ExpenseController extends Controller
@@ -12,11 +14,11 @@ class ExpenseController extends Controller
     /**
      * Display a listing of the resource.
      * 
-     * @return Collection
+     * @return ExpenseCollection
      */
-    public function index() : Collection
+    public function index() : ExpenseCollection
     {
-        return Expense::get();
+        return new ExpenseCollection(Expense::paginate(25));
     }
 
     /**
@@ -37,11 +39,11 @@ class ExpenseController extends Controller
      * Display the specified resource.
      * 
      * @param Expense $expense
-     * @return Expense
+     * @return ExpenseResource
      */
-    public function show(Expense $expense) : Expense
+    public function show(Expense $expense) : ExpenseResource
     {
-        return $expense;
+        return new ExpenseResource($expense);
     }
 
     /**
