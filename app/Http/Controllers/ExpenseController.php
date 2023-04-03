@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Expense;
 use Illuminate\Http\Response;
 use App\Http\Requests\ExpenseRequest;
 use App\Http\Resources\ExpenseResource;
+use App\Notifications\RegisteredExpense;
 use App\Http\Resources\ExpenseCollection;
-use Illuminate\Database\Eloquent\Collection;
 
 class ExpenseController extends Controller
 {
@@ -29,7 +30,9 @@ class ExpenseController extends Controller
      */
     public function store(ExpenseRequest $request) : Response
     {
-       return response(
+        $user = User::find($request['user_id']);
+        $user->notify(new RegisteredExpense());
+        return response(
             Expense::create($request->all()), 
             201
         );
