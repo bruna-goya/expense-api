@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\ExpenseController;
-use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ExpenseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::apiResource('users', UserController::class);
+    Route::apiResource('expenses', ExpenseController::class);
 });
-
-Route::apiResource('expenses', ExpenseController::class);
+Route::post('/login', [UserController::class, 'login'])->name('users.login');
